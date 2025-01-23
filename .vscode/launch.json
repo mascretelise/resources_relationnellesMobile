@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "resources_relationnelles",
+            "cwd": "resources_relationnelles",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "resources_relationnelles (profile mode)",
+            "cwd": "resources_relationnelles",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "resources_relationnelles (release mode)",
+            "cwd": "resources_relationnelles",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}
