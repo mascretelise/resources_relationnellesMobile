@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Pages/accueil.dart';
+import 'package:myapp/Pages/login.dart';
 
 class Nav extends StatefulWidget {
   const Nav({super.key});
@@ -12,7 +13,9 @@ class _NavState extends State<Nav> {
   int _selectedIndex = 0;
   final List<Widget> _widgetOptions = <Widget>[
     Accueil(),
-    Text('Paramètres'),
+    Text(
+        'Paramètres'), //Change le texte en paramètre à l'appui du bouton à l'index 2.
+    Login(), //Affiche la page test.dart à l'appui du bouton à l'index 3.
   ];
 
   void _onItemTap(int index) {
@@ -44,6 +47,10 @@ class _NavState extends State<Nav> {
             icon: Icon(Icons.settings),
             label: 'Paramètres',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Connexion',
+          )
         ],
         backgroundColor: Colors.blue[100],
         currentIndex: _selectedIndex,
