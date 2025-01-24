@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Pages/accueil.dart';
 import 'package:myapp/Pages/login.dart';
+import 'package:myapp/Pages/register.dart';
 import 'package:myapp/Pages/settings.dart';
 
 /*
@@ -14,7 +15,7 @@ class Nav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // Nombre d'onglets
+      length: 4, // Nombre d'onglets
       child: Scaffold(
         appBar: AppBar(
           title: Row(
@@ -34,6 +35,9 @@ class Nav extends StatelessWidget {
               Tab(icon: Icon(Icons.account_circle_outlined), text: 'Compte'),
               Tab(icon: Icon(Icons.settings), text: 'Paramètres'),
               Tab(icon: Icon(Icons.login), text: 'Connexion'),
+              Tab(
+                  icon: Icon(Icons.app_registration_rounded),
+                  text: 'Inscrption'),
               //Tab(icon: Icon(Icons.NomIcone), text: 'Texte du tab'),
             ],
           ),
@@ -44,6 +48,7 @@ class Nav extends StatelessWidget {
             Accueil(),
             Settings(),
             Login(),
+            Register(),
             //ClasseDunePage(),
           ],
         ),
