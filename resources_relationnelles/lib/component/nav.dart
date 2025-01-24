@@ -3,6 +3,11 @@ import 'package:myapp/Pages/accueil.dart';
 import 'package:myapp/Pages/login.dart';
 import 'package:myapp/Pages/settings.dart';
 
+/*
+> Entête de l'application avec nom/icone et rouleau de navigation
+
+*/
+
 class Nav extends StatelessWidget {
   const Nav({super.key});
 
@@ -29,6 +34,7 @@ class Nav extends StatelessWidget {
               Tab(icon: Icon(Icons.account_circle_outlined), text: 'Compte'),
               Tab(icon: Icon(Icons.settings), text: 'Paramètres'),
               Tab(icon: Icon(Icons.login), text: 'Connexion'),
+              //Tab(icon: Icon(Icons.NomIcone), text: 'Texte du tab'),
             ],
           ),
         ),
@@ -38,6 +44,7 @@ class Nav extends StatelessWidget {
             Accueil(),
             Settings(),
             Login(),
+            //ClasseDunePage(),
           ],
         ),
       ),

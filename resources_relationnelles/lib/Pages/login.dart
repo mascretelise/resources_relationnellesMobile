@@ -14,9 +14,6 @@ Idées d'amélioration:
 > Ergonomie : Stocker les IDs dans un fichier local pour permettre à l'appli de préremplir les champs (utiliser hintText)
 > Sécurité  : Mettre en place une clé API pour la communication avec le serveur
 > Affichage : Rendre l'interface un peu plus jolie
-> Maintenabilité : Récupérer l'ip à partir d'une variable globale 
-                   pour éviter de modifier toutes les pages une à une
->
 */
 
 class Login extends StatefulWidget {
@@ -55,23 +52,22 @@ class _TestState extends State<Login> {
 
       print(await client.get(uri));
     } catch (error) {
-      print("OwO");
+      print("Erreur requête :");
       print(error);
+      showPopupErreurConnexion(context);
     } finally {
       client.close();
     }
   }
 
-  void _showPopup(BuildContext context) {
-    final username = _usernameController.text;
-    final password = _passwordController.text;
-
+  void showPopupErreurConnexion(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('User Information'),
-          content: Text('Username: $username\nPassword: $password'),
+          title: Text('Erreur'),
+          content: Text(
+              "L'application a rencontré une erreur et n'a pas pu joindre le serveur \n Veuillez réessayer plus tard."),
           actions: [
             TextButton(
               onPressed: () {
@@ -120,10 +116,10 @@ class _TestState extends State<Login> {
             OutlinedButton(
               onPressed: () {
                 // Show popup with username and password
-                _showPopup(context);
+                //_showPopup(context);
                 login(context);
               },
-              child: Text('Un bouton !'),
+              child: Text('Se connecter'),
             ),
           ],
         ),
