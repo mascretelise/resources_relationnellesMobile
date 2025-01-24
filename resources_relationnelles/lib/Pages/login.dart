@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:crypto/crypto.dart' as crypto;
 import 'package:myapp/config.dart';
 
 /*
 > Page d'authentification pour l'appli mobile
 > Demande login + mot de passe
 > Envoi de la requête à un serveur 
-> Mot de passe hashé en SHA256
 
 Idées d'amélioration:
 > Ergonomie : Stocker les IDs dans un fichier local pour permettre à l'appli de préremplir les champs (utiliser hintText)
@@ -24,6 +22,7 @@ class Login extends StatefulWidget {
 }
 
 class _TestState extends State<Login> {
+  var buttonLoginEnabled = true;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -35,32 +34,76 @@ class _TestState extends State<Login> {
     super.dispose();
   }
 
-  void login(BuildContext context) async {
-    var username = _usernameController.text;
-    var password = _passwordController.text;
-    var hashPassword = crypto.sha256.convert(utf8.encode(password)).toString();
-    print(password);
-    print(hashPassword);
-    var client = http.Client();
-    try {
-      var response = await client.post(Uri.https(Config.serverIp),
-          headers: {'login': username, 'password': hashPassword});
-      // var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
-      var decodedResponse = utf8.decode(response.bodyBytes);
-      //var uri = Uri.parse(decodedResponse['uri'] as String);
-      var uri = Uri.parse(decodedResponse);
+  bool StringEmpty(value) {
+    return (value == "");
+  }
 
-      print(await client.get(uri));
+  void messageRemplirLoginEtPassword() {
+    setState(() {
+      buttonLoginEnabled = true; // Disable the button
+    });
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Attention'),
+          content: Text(
+              "Veuillez remplir votre nom d'utilisateur ainsi que votre mot de passe afin de vous connecter."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void login(BuildContext context) async {
+    var username = _usernameController.text; //Récupération des IDs
+    var password = _passwordController.text;
+
+    if (StringEmpty(username) | StringEmpty(password)) {
+      messageRemplirLoginEtPassword();
+    }
+
+    print(username);
+    print(password);
+    var client = http.Client(); //Création client HTTP
+    setState(() {
+      buttonLoginEnabled = false; // Disable the button
+    });
+    try {
+      var response = await client.post(
+          Uri.http(
+              Config.serverIp), //Envoi de la requête (IP dans Config.serverIP)
+          headers: {
+            'username': username,
+            'password': password
+          }); //Headers pour l'API
+      var decodedResponse =
+          utf8.decode(response.bodyBytes); //récupération de la réponse
+      print(decodedResponse);
     } catch (error) {
+      //Si erreur connexion
+      setState(() {
+        buttonLoginEnabled = true; // Disable the button
+      });
       print("Erreur requête :");
       print(error);
       showPopupErreurConnexion(context);
     } finally {
+      //Fermeture du client
       client.close();
+      //Traitement de la réponse
     }
   }
 
   void showPopupErreurConnexion(BuildContext context) {
+    //Affichage POPup si erreur connexion
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -114,13 +157,28 @@ class _TestState extends State<Login> {
             ),
             SizedBox(height: 16),
             OutlinedButton(
-              onPressed: () {
-                // Show popup with username and password
-                //_showPopup(context);
-                login(context);
-              },
-              child: Text('Se connecter'),
-            ),
+                onPressed: buttonLoginEnabled
+                    ? () => {
+                          print('Bouton désactivé'),
+                          login(context),
+                        }
+                    : null, // Only call login if enabled
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: buttonLoginEnabled
+                      ? Color.fromRGBO(181, 137, 194, 1)
+                      : Color.fromRGBO(0, 0, 0, 1),
+                  side: BorderSide(
+                    color: buttonLoginEnabled
+                        ? Color.fromRGBO(224, 224, 224, 1)
+                        : Color.fromRGBO(64, 64, 64, 1),
+                  ),
+                  backgroundColor: buttonLoginEnabled
+                      ? Color.fromRGBO(255, 255, 255, 1)
+                      : Color.fromRGBO(128, 128, 128, 1),
+                ),
+                child: Text(
+                  buttonLoginEnabled ? 'Se connecter' : 'Connexion en cours...',
+                ))
           ],
         ),
       ),
