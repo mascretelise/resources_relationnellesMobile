@@ -118,8 +118,8 @@ class _TestState extends State<Register> {
     }
 
     //Vérification si le mot de passe contient 10 caractères
-    if (password.length < 10) {
-      passwordDialog += "- 10 caractères \n";
+    if (password.length < 10 and password.length>32) {
+      passwordDialog += "- entre 10 et 32 caractères \n";
     }
 
     //Vérification si le mot de passe contient une majuscule
