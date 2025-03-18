@@ -1,5 +1,7 @@
 import 'dart:convert';  // For jsonDecode
-import 'package:flutter/services.dart';  // For rootBundle to load assets
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';  // For rootBundle to load assets
 
 class UserConfig {
   // Instance variables with default values
@@ -36,9 +38,30 @@ class UserConfig {
     }
   }
 
-  // Optional: Save settings back to JSON or shared preferences
   Future<void> saveSettings() async {
-    // Your saving logic here (e.g., save to shared preferences or update the JSON file)
     print("Saving settings...");
+    try {
+      //Récupération du fichier de config
+      final directory = await getApplicationDocumentsDirectory();
+      final file = File('${directory.path}/settings.json');
+
+      // Map avec les données de l'UI
+      final Map<String, dynamic> settingsData = {
+        'storeUsername': rememberUsername,
+        'enableNightmode': nightMode,
+        'colorblindMode': colorblind,
+        'colorblindType': colorblindType,
+      };
+
+      //Conversion en JSON
+      final jsonString = jsonEncode(settingsData);
+
+      //Envoi le tout dans le fichier
+      await file.writeAsString(jsonString);
+      print("Settings saved to JSON file.");
+    } catch (e) {
+      
+      print("Error saving settings: $e");
+    }
   }
 }
