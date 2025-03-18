@@ -118,7 +118,7 @@ class _TestState extends State<Register> {
     }
 
     //Vérification si le mot de passe contient 10 caractères
-    if (password.length < 10 and password.length>32) {
+    if (password.length < 10 && password.length>32) {
       passwordDialog += "- entre 10 et 32 caractères \n";
     }
 
@@ -215,7 +215,8 @@ class _TestState extends State<Register> {
             'prenom': prenom,
             'email': email,
             'password': password
-          }); //Headers pour l'API
+          })//Headers pour l'API
+          .timeout(Duration(seconds: 10)); //timeout de 10 secondes
       var decodedResponse =
           utf8.decode(response.bodyBytes); //récupération de la réponse
       print(decodedResponse);

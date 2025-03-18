@@ -83,7 +83,9 @@ class _TestState extends State<Login> {
           headers: {
             'username': username,
             'password': password
-          }); //Headers pour l'API
+          })//Headers pour l'API
+          .timeout(Duration(seconds: 10)); //timeout de 10 secondes
+          
       var decodedResponse =
           utf8.decode(response.bodyBytes); //récupération de la réponse
       print(decodedResponse);
