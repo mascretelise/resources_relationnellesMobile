@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:myapp/config.dart';
+import 'package:myapp/user.dart';
 
 /*
 > Page de création de compte pour l'appli mobile
@@ -38,7 +36,7 @@ class _TestState extends State<Register> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  var buttonLoginEnabled = true;
+  var buttonRegisterEnabled = true;
 
   @override
   void dispose() {
@@ -118,7 +116,7 @@ class _TestState extends State<Register> {
     }
 
     //Vérification si le mot de passe contient 10 caractères
-    if (password.length < 10 && password.length>32) {
+    if (password.length < 10 && password.length > 32) {
       passwordDialog += "- entre 10 et 32 caractères \n";
     }
 
@@ -165,15 +163,15 @@ class _TestState extends State<Register> {
     return retourPass & retourData;
   }
 
-  void showPopupErreurConnexion(BuildContext context) {
-    //Affichage POPup si erreur connexion
+  void showPopupErreurRegister(BuildContext context, error) {
+    //Affichage POPup si erreur Register
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Erreur'),
           content: Text(
-              "L'application a rencontré une erreur et n'a pas pu joindre le serveur \n Veuillez réessayer plus tard."),
+              "L'application a rencontré une erreur et n'a pas pu joindre le serveur \n Veuillez réessayer plus tard \n $error"),
           actions: [
             TextButton(
               onPressed: () {
@@ -197,42 +195,23 @@ class _TestState extends State<Register> {
     var donneesCompletes = verifierDonneesUtilisateur(
         nom, prenom, email, password, confirmPassword);
 
-    if (!donneesCompletes) {
-      //Si a renvoyé false, on n'envoie pas la requête
-      return;
-    }
+    //Si a renvoyé false, on n'envoie pas la requête
+    if (!donneesCompletes) return;
 
-    var client = http.Client(); //Création client HTTP
     setState(() {
-      buttonLoginEnabled = false; // Disable the button
+      buttonRegisterEnabled = false; // Disable the button
     });
     try {
-      var response = await client.post(
-          Uri.http(
-              Config.serverIp), //Envoi de la requête (IP dans Config.serverIP)
-          headers: {
-            'nom': nom,
-            'prenom': prenom,
-            'email': email,
-            'password': password
-          })//Headers pour l'API
-          .timeout(Duration(seconds: 10)); //timeout de 10 secondes
-      var decodedResponse =
-          utf8.decode(response.bodyBytes); //récupération de la réponse
-      print(decodedResponse);
+      await User().register(nom, prenom, email, password);
+      await User().authentificate(email, password);
     } catch (error) {
-      //Si erreur connexion
       setState(() {
-        buttonLoginEnabled = true; // Disable the button
+        buttonRegisterEnabled = true;
       });
-      print("Erreur requête :");
       print(error);
-      showPopupErreurConnexion(context);
-    } finally {
-      //Fermeture du client
-      client.close();
-      //Traitement de la réponse
-    }
+      showPopupErreurRegister(context, error);
+      return;
+    } finally {}
   }
 
   @override
@@ -274,10 +253,11 @@ class _TestState extends State<Register> {
                         isPassword: true),
                     SizedBox(height: 16),
                     OutlinedButton(
-                      onPressed:
-                          buttonLoginEnabled ? () => register(context) : null,
+                      onPressed: buttonRegisterEnabled
+                          ? () => register(context)
+                          : null,
                       child: Text(
-                        buttonLoginEnabled
+                        buttonRegisterEnabled
                             ? "S'inscrire"
                             : "Création du compte...",
                       ),

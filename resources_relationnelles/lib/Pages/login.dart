@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:myapp/config.dart';
+import 'package:myapp/user.dart';
 
 /*
 > Page d'authentification pour l'appli mobile
@@ -23,13 +21,13 @@ class Login extends StatefulWidget {
 
 class _TestState extends State<Login> {
   var buttonLoginEnabled = true;
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
     // Dispose controllers when the widget is disposed
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -63,32 +61,20 @@ class _TestState extends State<Login> {
   }
 
   void login(BuildContext context) async {
-    var username = _usernameController.text; //Récupération des IDs
+    var email = _emailController.text; //Récupération des IDs
     var password = _passwordController.text;
 
-    if (StringEmpty(username) | StringEmpty(password)) {
+    if (StringEmpty(email) | StringEmpty(password)) {
       messageRemplirLoginEtPassword();
     }
 
-    print(username);
+    print(email);
     print(password);
-    var client = http.Client(); //Création client HTTP
     setState(() {
       buttonLoginEnabled = false; // Disable the button
     });
     try {
-      var response = await client.post(
-          Uri.http(
-              Config.serverIp), //Envoi de la requête (IP dans Config.serverIP)
-          headers: {
-            'username': username,
-            'password': password
-          })//Headers pour l'API
-          .timeout(Duration(seconds: 10)); //timeout de 10 secondes
-          
-      var decodedResponse =
-          utf8.decode(response.bodyBytes); //récupération de la réponse
-      print(decodedResponse);
+      await User().authentificate(email, password);
     } catch (error) {
       //Si erreur connexion
       setState(() {
@@ -96,15 +82,12 @@ class _TestState extends State<Login> {
       });
       print("Erreur requête :");
       print(error);
-      showPopupErreurConnexion(context);
-    } finally {
-      //Fermeture du client
-      client.close();
-      //Traitement de la réponse
-    }
+      showPopupErreurConnexion(context, error);
+      return;
+    } finally {}
   }
 
-  void showPopupErreurConnexion(BuildContext context) {
+  void showPopupErreurConnexion(BuildContext context, error) {
     //Affichage POPup si erreur connexion
     showDialog(
       context: context,
@@ -112,7 +95,7 @@ class _TestState extends State<Login> {
         return AlertDialog(
           title: Text('Erreur'),
           content: Text(
-              "L'application a rencontré une erreur et n'a pas pu joindre le serveur \n Veuillez réessayer plus tard."),
+              "L'application a rencontré une erreur et n'a pas pu joindre le serveur \n Veuillez réessayer plus tard. \n $error"),
           actions: [
             TextButton(
               onPressed: () {
@@ -138,10 +121,10 @@ class _TestState extends State<Login> {
             SizedBox(
               width: 200, // Optional: set a fixed width for the TextField
               child: TextField(
-                controller: _usernameController,
+                controller: _emailController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: "Nom d'utilisateur",
+                  labelText: "Adresse mail",
                 ),
               ),
             ),

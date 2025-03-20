@@ -76,8 +76,9 @@ class BuildSwitch extends StatefulWidget {
   bool settingValue; //Valeur initiale
   final ValueChanged<bool> onChanged; //Callback pour le parent
 
-  BuildSwitch({ //Construit le switch avec les différentes valeurs
-    super.key, 
+  BuildSwitch({
+    //Construit le switch avec les différentes valeurs
+    super.key,
     required this.title,
     required this.settingValue,
     required this.onChanged,
@@ -91,7 +92,8 @@ class _BuildSwitchState extends State<BuildSwitch> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0), //Padding sur les côtés
+      padding:
+          const EdgeInsets.symmetric(horizontal: 16.0), //Padding sur les côtés
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -102,10 +104,12 @@ class _BuildSwitchState extends State<BuildSwitch> {
           Transform.scale(
             scale: 0.75, //Réduit la taille du switch
             child: Switch(
-              value: widget.settingValue, //Récupère la valeur du fichier Json (ou false)
+              value: widget
+                  .settingValue, //Récupère la valeur du fichier Json (ou false)
               onChanged: (bool value) {
                 setState(() {
-                  widget.settingValue = value; //Met à jour la valeur en elle-même
+                  widget.settingValue =
+                      value; //Met à jour la valeur en elle-même
                 });
                 widget.onChanged(value); //Change le switch sur l'interface
               },

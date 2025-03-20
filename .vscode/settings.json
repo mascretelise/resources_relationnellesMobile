@@ -1,4 +1,5 @@
 {
     "java.compile.nullAnalysis.mode": "disabled",
-    "cmake.sourceDirectory": "C:/Users/Quentin/Desktop/etudes/cube/resources_relationnellesMobile/resources_relationnelles/windows/flutter"
+    "cmake.sourceDirectory": "C:/Users/Quentin/Desktop/etudes/cube/resources_relationnellesMobile/resources_relationnelles/windows/flutter",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
