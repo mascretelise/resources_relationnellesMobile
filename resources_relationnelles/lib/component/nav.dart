@@ -3,6 +3,8 @@ import 'package:myapp/Pages/accueil.dart';
 import 'package:myapp/Pages/login.dart';
 import 'package:myapp/Pages/register.dart';
 import 'package:myapp/Pages/settings.dart';
+import 'package:myapp/Pages/VisualiseRessource.dart';
+import 'package:myapp/Pages/ExportRessource.dart';
 
 /*
 > Entête de l'application avec nom/icone et rouleau de navigation
@@ -15,7 +17,7 @@ class Nav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4, // Nombre d'onglets
+      length: 6, // Nombre d'onglets
       child: Scaffold(
         appBar: AppBar(
           title: Row(
@@ -35,9 +37,9 @@ class Nav extends StatelessWidget {
               Tab(icon: Icon(Icons.account_circle_outlined), text: 'Compte'),
               Tab(icon: Icon(Icons.settings), text: 'Paramètres'),
               Tab(icon: Icon(Icons.login), text: 'Connexion'),
-              Tab(
-                  icon: Icon(Icons.app_registration_rounded),
-                  text: 'Inscrption'),
+              Tab(icon: Icon(Icons.app_registration_rounded), text: 'Inscrption'),
+              Tab(icon: Icon(Icons.file_upload), text: 'Upload'),
+              Tab(icon: Icon(Icons.file_copy), text: 'Banque de ressources'),
               //Tab(icon: Icon(Icons.NomIcone), text: 'Texte du tab'),
             ],
           ),
@@ -49,6 +51,8 @@ class Nav extends StatelessWidget {
             Settings(),
             Login(),
             Register(),
+            ExportRessource(),
+            VisualiseRessource(),
             //ClasseDunePage(),
           ],
         ),

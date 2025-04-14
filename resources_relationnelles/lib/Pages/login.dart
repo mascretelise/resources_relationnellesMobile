@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:myapp/config.dart';
 import 'package:myapp/user.dart';
+import 'package:http/http.dart' as http;
+
 
 /*
 > Page d'authentification pour l'appli mobile
@@ -21,13 +26,13 @@ class Login extends StatefulWidget {
 
 class _TestState extends State<Login> {
   var buttonLoginEnabled = true;
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
     // Dispose controllers when the widget is disposed
-    _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -61,20 +66,32 @@ class _TestState extends State<Login> {
   }
 
   void login(BuildContext context) async {
-    var email = _emailController.text; //Récupération des IDs
     var password = _passwordController.text;
+    var username = _usernameController.text; //Récupération des IDs
 
-    if (StringEmpty(email) | StringEmpty(password)) {
+
+    if (StringEmpty(username) | StringEmpty(password)) {
       messageRemplirLoginEtPassword();
     }
 
-    print(email);
+    print(username);
     print(password);
     setState(() {
       buttonLoginEnabled = false; // Disable the button
     });
     try {
-      await User().authentificate(email, password);
+      var client = http.Client();
+      var response = await client.post(
+          Config.connect(Config.loginRoute), //Connexion à l'API
+          headers: {
+            'username': username,
+            'password': password
+          })//Headers pour l'API
+          .timeout(Config.timeoutValue); //timeout de 10 secondes
+          
+      var decodedResponse =
+          utf8.decode(response.bodyBytes); //récupération de la réponse
+      print(decodedResponse);
     } catch (error) {
       //Si erreur connexion
       setState(() {
@@ -121,10 +138,10 @@ class _TestState extends State<Login> {
             SizedBox(
               width: 200, // Optional: set a fixed width for the TextField
               child: TextField(
-                controller: _emailController,
+                controller: _usernameController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: "Adresse mail",
+                  labelText: "Nom d'utilisateur",
                 ),
               ),
             ),

@@ -5,11 +5,23 @@
 
 class Config {
   static var serverIp =
-      "http://10.0.2.2:3000/api"; //IP du serveur test/réel (10.0.2.2:80 envoie à la machine où se trouve l'emulateur)
+      "10.0.2.2"; //IP du serveur test/réel (10.0.2.2 envoie à la machine où se trouve l'emulateur)
+  static const serverPort = 3000;
+  static var apiPathBase = '/api';
+  static var registerRoute="/register";
+  static var loginRoute="/login";
+  static var uploadRoute="/upload";
   static var apiKey = ""; //Clé api
   static var configfile =
       ""; //Chemin vers le fichier de configuration de l'application
-  static var loginRoute = "/login";
-  static var registerRoute = "/register";
-  static var timeoutValue = 5; //secondes
+  static var timeoutValue = Duration(seconds: 10); //secondes
+
+  static connect(String targetApi){
+    return Uri(
+                scheme: 'http',
+                host: serverIp,
+                port: serverPort,
+                path: apiPathBase+targetApi,
+    );
+  }
 }
