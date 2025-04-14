@@ -28,15 +28,13 @@ class User {
     try {
       print('Sending request to: ${Config.serverIp}${Config.loginRoute}');
       var response = await client.post(
-              Uri.parse(Config.serverIp +
-                  Config
-                      .loginRoute), //Envoi de la requête (IP dans Config.serverIP)
+              Config.connect(Config.registerRoute), //Envoi de la requête (IP dans Config.serverIP)
               body: {
             'email': mail,
             'mdp': password
           }) //Headers pour l'API
           .timeout(
-              Duration(seconds: Config.timeoutValue)); //timeout de 10 secondes
+              Config.timeoutValue); //timeout de 10 secondes
       var decodedResponse =
           utf8.decode(response.bodyBytes); //récupération de la réponse
       print(decodedResponse);
@@ -56,7 +54,7 @@ class User {
     final url = Uri.parse("${Config.serverIp}${Config.registerRoute}");
     final body = jsonEncode(
         {'lastName': nom, 'firstName': prenom, 'email': mail, 'mdp': password});
-    final timeout = Duration(seconds: Config.timeoutValue);
+    final timeout = Config.timeoutValue;
     final header = {'Content-Type': 'application/json'};
 
     print("Sending HTTP Request:");
@@ -68,7 +66,9 @@ class User {
     try {
       //Envoi de la requête (IP dans Config.serverIP)
       var response =
-          await client.post(url, body: body, headers: header).timeout(timeout);
+          await client.post(Config.connect(Config.registerRoute), 
+          body: body, 
+          headers: header).timeout(timeout);
 
       //récupération de la réponse
       var decodedResponse = utf8.decode(response.bodyBytes);

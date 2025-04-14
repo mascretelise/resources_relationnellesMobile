@@ -26,13 +26,13 @@ class Login extends StatefulWidget {
 
 class _TestState extends State<Login> {
   var buttonLoginEnabled = true;
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   void dispose() {
     // Dispose controllers when the widget is disposed
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -65,33 +65,21 @@ class _TestState extends State<Login> {
     );
   }
 
-  void login(BuildContext context) async {
+   void login(BuildContext context) async {
+    var email = _emailController.text; //Récupération des IDs
     var password = _passwordController.text;
-    var username = _usernameController.text; //Récupération des IDs
 
-
-    if (StringEmpty(username) | StringEmpty(password)) {
+    if (StringEmpty(email) | StringEmpty(password)) {
       messageRemplirLoginEtPassword();
     }
 
-    print(username);
+    print(email);
     print(password);
     setState(() {
       buttonLoginEnabled = false; // Disable the button
     });
     try {
-      var client = http.Client();
-      var response = await client.post(
-          Config.connect(Config.loginRoute), //Connexion à l'API
-          headers: {
-            'username': username,
-            'password': password
-          })//Headers pour l'API
-          .timeout(Config.timeoutValue); //timeout de 10 secondes
-          
-      var decodedResponse =
-          utf8.decode(response.bodyBytes); //récupération de la réponse
-      print(decodedResponse);
+      await User().authentificate(email, password);
     } catch (error) {
       //Si erreur connexion
       setState(() {
@@ -138,7 +126,7 @@ class _TestState extends State<Login> {
             SizedBox(
               width: 200, // Optional: set a fixed width for the TextField
               child: TextField(
-                controller: _usernameController,
+                controller: _emailController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "Nom d'utilisateur",

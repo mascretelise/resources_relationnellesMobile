@@ -206,19 +206,8 @@ class _TestState extends State<Register> {
       buttonRegisterEnabled = false; // Disable the button
     });
     try {
-      var client = http.Client();
-      var response = await client.post(
-          Config.connect(Config.registerRoute), //Informations de connexions au serveur
-          headers: {
-            'nom': nom,
-            'prenom': prenom,
-            'email': email,
-            'mdp': password,
-          })//Headers pour l'API
-          .timeout(Config.timeoutValue); //timeout de 10 secondes
-      var decodedResponse =
-          utf8.decode(response.bodyBytes); //récupération de la réponse
-      print(decodedResponse);
+      await User().register(nom, prenom, email, password);
+      await User().authentificate(email, password);
     } catch (error) {
       setState(() {
         buttonRegisterEnabled = true;
