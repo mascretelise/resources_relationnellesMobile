@@ -16,7 +16,7 @@ class _SettingsState extends State<Settings> {
     super.initState();
     userConfig = UserConfig(); //Initialisation
     userConfig.loadFromJson().then((_) {
-      setState(() {}); //Attend que le fichier Json aît été traité
+      setState(() {});
     });
   }
 
