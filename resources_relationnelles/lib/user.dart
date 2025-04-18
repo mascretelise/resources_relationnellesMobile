@@ -17,7 +17,7 @@ class User extends ChangeNotifier {
   var mail = "";
   var passwordHash = "";
   var status = 0;
-
+  late String token;
   late PersistCookieJar cookieJar;
 
   User._(); // private named constructor
@@ -38,13 +38,14 @@ class User extends ChangeNotifier {
     notifyListeners();
   }
 
-  void disconnect() {
+  void disconnect(context) {
     id = -1;
     nom = "";
     prenom = "";
     mail = "";
     passwordHash = "";
     status = 0;
+    token = "";
     cookieJar.deleteAll();
   }
 
@@ -60,17 +61,19 @@ class User extends ChangeNotifier {
 
       var decodedResponse = utf8.decode(response.bodyBytes);
       print(decodedResponse);
+      print(response.headers);
 
       if (response.statusCode != 200) {
         throw Exception(
             "Erreur lors de l'authentification' ${response.statusCode}");
       } else {
-        final cookies =
-            response.headers['set-cookie']; //Récupération des cookies
-        if (cookies != null) {
-          cookieJar.saveFromResponse(
-              url, [Cookie.fromSetCookieValue(cookies)]); //stockage
-        }
+        // final cookies =
+        //     response.headers['set-cookie']; //Récupération des cookies
+        // if (cookies != null) {
+        //   cookieJar.saveFromResponse(
+        //       url, [Cookie.fromSetCookieValue(cookies)]); //stockage
+        //}
+        token = response.headers['token']!;
       }
     } catch (error) {
       rethrow;

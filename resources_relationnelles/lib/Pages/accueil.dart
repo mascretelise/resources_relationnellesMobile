@@ -37,20 +37,30 @@ class _AccueilState extends State<Accueil> with RouteAware {
 
   @override
   void didPopNext() {
-    // Called when user navigates back to this page
     _updateUser();
   }
 
   @override
   void didPush() {
-    // Called when this page is initially pushed
     _updateUser();
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
     return Center(
-      child: Text(id != -1 ? 'Utilisateur connecté !' : 'Kikou'),
-    );
+        child: Column(
+      children: [
+        Text(id != -1 ? 'Utilisateur connecté !' : 'Kikou'),
+        ElevatedButton(
+            onPressed: () => disconnectUser(context, user),
+            child: Text("Me déconnecter")),
+      ],
+    ));
   }
+}
+
+disconnectUser(BuildContext context, User user) {
+  user.disconnect(context);
+  Navigator.pushReplacementNamed(context, '/disconnected');
 }

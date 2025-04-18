@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -122,7 +123,6 @@ class _ExportRessourceState extends State<ExportRessource> {
 
   @override
   void dispose() {
-    // Dispose controllers when the widget is disposed
     _titreRessourceController.dispose();
     _descriptionRessourceController.dispose();
     _categorieRessourceController.dispose();
@@ -158,50 +158,43 @@ class _ExportRessourceState extends State<ExportRessource> {
 
   Future<void> sendRessource() async {
     final user = Provider.of<User>(context, listen: false);
-    CookieJar cookieJar = user.cookieJar;
+    //CookieJar cookieJar = user.cookieJar;
 
     var client = http.Client(); // Client HTTP
     try {
-      var uri = Config.connect(Config.uploadRoute); // Composition URL for API
+      var uri = Config.connect(Config.uploadRoute); // Composition URL pour API
       var request = http.MultipartRequest('POST', uri); // POST method
+      request.fields.addAll({
+        'res_nom': _titreRessourceController.text,
+        'cat_categorie': _categorieRessourceController.text,
+        'res_description': _descriptionRessourceController.text,
+        'res_extension': fileExtension!,
+        'com_commentaire': "yuumi",
+      });
 
-      request.fields['res_nom'] = _titreRessourceController.text;
-      request.fields['cat_categorie'] = _categorieRessourceController.text;
-      request.fields['res_description'] = _descriptionRessourceController.text;
-      request.fields['res_extension'] = fileExtension!;
-
-      // Add file (multipart)
+      //Ajout du fichier dans la requêtes
       if (_fileName != null && fileData != null) {
         request.files.add(http.MultipartFile.fromBytes(
-          'fileData', // Field name for the file in the form
-          fileData!, // File data as bytes
-          filename: _fileName!, // File name
+          'fileData',
+          fileData!,
+          filename: _fileName!,
         ));
       }
 
-      // Retrieve cookies from cookie jar and add them to request headers
-      final cookies = await cookieJar.loadForRequest(uri);
-      final cookieHeader = cookies.isNotEmpty
-          ? 'cookie=${cookies.map((cookie) => '${cookie.name}=${cookie.value}').join(';')}'
-          : '';
-      request.headers['Cookie'] = cookieHeader;
+      request.headers['authorization'] =
+          'Bearer ${user.token}'; //le renvoie dans le header avec authorization
 
-      // if (cookieHeader.isNotEmpty) {
-      //   final tokenCookie = cookies.firstWhere(
-      //     (cookie) => cookie.name == 'auth',
-      //     orElse: () => Cookie('auth', ''),
-      //   );
-      //   if (tokenCookie.value.isNotEmpty) {
-      //     request.headers['Authorization'] = 'Bearer ${tokenCookie.value}';
-      //   }
-      // }
-      print("Titre : ${_titreRessourceController.text}");
-      print("Catégories : ${_categorieRessourceController.text}");
-      print("Description : ${_descriptionRessourceController.text}");
-      print("Nom fichier : ${_fileName}");
-      print("Extension fichier : ${fileExtension}");
-      print("Data fichier: ${fileData}");
-      print("Cookies : $cookieHeader");
+      debugPrint("---- Détails de la requête ----");
+      debugPrint("Titre : ${_titreRessourceController.text}");
+      debugPrint("Catégorie : ${_categorieRessourceController.text}");
+      debugPrint("Description : ${_descriptionRessourceController.text}");
+      debugPrint("Fichier : $_fileName ($fileExtension)");
+      debugPrint("Taille : ${fileData!.length} octets");
+      debugPrint("Token : ${user.token}");
+      debugPrint("Headers : ${request.headers}");
+      debugPrint("Champs : ${request.fields}");
+      debugPrint("Fichiers : ${request.files.length}");
+      debugPrint("------------------------------");
 
       // Send the request
       var response = await request.send().timeout(Duration(seconds: 10));
