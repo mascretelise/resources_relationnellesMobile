@@ -62,5 +62,9 @@ class _AccueilState extends State<Accueil> with RouteAware {
 
 disconnectUser(BuildContext context, User user) {
   user.disconnect(context);
-  Navigator.pushReplacementNamed(context, '/disconnected');
+
+  // Navigation différée pour éviter un crash
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    Navigator.pushReplacementNamed(context, '/disconnected');
+  });
 }

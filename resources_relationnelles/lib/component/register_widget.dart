@@ -23,8 +23,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-
-  bool buttonRegisterEnabled = true;
+  bool mentionLegalesAccepted = false;
+  bool buttonRegisterEnabled = false;
 
   @override
   void dispose() {
@@ -134,25 +134,23 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   }
 
   Future<void> register() async {
-    final nom = _nomController.text;
-    final prenom = _prenomController.text;
-    final email = _emailController.text;
+    final user = Provider.of<User>(context, listen: false);
+    user.nom = _nomController.text;
+    user.prenom = _prenomController.text;
+    user.mail = _emailController.text;
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
 
     final valid = verifierDonneesUtilisateur(
-        nom, prenom, email, password, confirmPassword);
+        user.nom, user.prenom, user.mail, password, confirmPassword);
     if (!valid) return;
 
     setState(() => buttonRegisterEnabled = false);
-
     try {
       final user = Provider.of<User>(context, listen: false);
-      await user.register(nom, prenom, email, password);
-      await user.authentificate(email, password);
-      widget.onRegisterSuccess?.call(email);
-
-      //Navigator.pushReplacementNamed(context, '/home');
+      await user.register(user.nom, user.prenom, user.mail, password);
+      await user.authentificate(user.mail, password);
+      widget.onRegisterSuccess?.call(user.mail);
     } catch (e) {
       widget.onRegisterError?.call(e);
       setState(() => buttonRegisterEnabled = true);
@@ -206,11 +204,56 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     isPassword: true,
                   ),
                   const SizedBox(height: 16),
+                  CheckboxListTile(
+                    title: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Mentions légales"),
+                              content: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                child: SingleChildScrollView(
+                                  child: Text(
+                                      "Texte très long avec les mentions légales à mettre \n"),
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text("Fermer"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        "J'accepte les mentions légales",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: const Color.fromARGB(255, 51, 110, 230),
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                    value: mentionLegalesAccepted,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        mentionLegalesAccepted = value ?? false;
+                        buttonRegisterEnabled = mentionLegalesAccepted;
+                      });
+                    },
+                    controlAffinity:
+                        ListTileControlAffinity.trailing, // Checkbox à droite
+                  ),
                   OutlinedButton(
                     onPressed: buttonRegisterEnabled ? register : null,
-                    child: Text(buttonRegisterEnabled
-                        ? "S'inscrire"
-                        : "Création du compte..."),
+                    child: Text(
+                        buttonRegisterEnabled ? "S'inscrire" : "S'inscrire"),
                   ),
                 ],
               ),

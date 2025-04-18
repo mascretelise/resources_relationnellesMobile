@@ -11,6 +11,8 @@ class Config {
   static const registerRoute = "/register"; //route création de compte
   static const loginRoute = "/login"; //route connexion
   static const uploadRoute = "/ressources"; //route pour l'ajout de ressources
+  static const lastRessources = "/ressources/recentes";
+  static const historiqueRessources = "/ressources/historique";
   static const apiKey = ""; //Clé api
   static var configfile =
       ""; //Chemin vers le fichier de configuration de l'application

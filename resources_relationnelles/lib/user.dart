@@ -2,11 +2,8 @@
 > Classe User
 */
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:cookie_jar/cookie_jar.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:myapp/config.dart';
 
@@ -18,18 +15,18 @@ class User extends ChangeNotifier {
   var passwordHash = "";
   var status = 0;
   late String token;
-  late PersistCookieJar cookieJar;
+  //late PersistCookieJar cookieJar;
 
   User._(); // private named constructor
 
   static Future<User> create() async {
     final user = User._();
-    final directory = await getApplicationDocumentsDirectory();
-    user.cookieJar = PersistCookieJar(
-      storage: FileStorage('${directory.path}/.cookies/'),
-      ignoreExpires: false,
-      persistSession: true,
-    );
+    // final directory = await getApplicationDocumentsDirectory();
+    // user.cookieJar = PersistCookieJar(
+    //   storage: FileStorage('${directory.path}/.cookies/'),
+    //   ignoreExpires: false,
+    //   persistSession: true,
+    // );
     return user;
   }
 
@@ -46,7 +43,7 @@ class User extends ChangeNotifier {
     passwordHash = "";
     status = 0;
     token = "";
-    cookieJar.deleteAll();
+    //cookieJar.deleteAll();
   }
 
   Future<void> authentificate(String mail, String password) async {
@@ -109,6 +106,8 @@ class User extends ChangeNotifier {
       print(decodedResponse);
 
       switch (response.statusCode) {
+        case 200:
+          break;
         case 201:
           break;
 
@@ -121,6 +120,26 @@ class User extends ChangeNotifier {
 
         default:
           throw Exception("Erreur ${response.statusCode}");
+      }
+    } catch (error) {
+      rethrow;
+    } finally {
+      client.close();
+    }
+  }
+
+  Future<String> getLastRessources() async {
+    var client = http.Client(); //Création client HTTP
+    try {
+      final Uri url = Config.connect(Config.lastRessources);
+      var response = await client.get(url).timeout(Config.timeoutValue);
+      var decodedResponse = utf8.decode(response.bodyBytes);
+      print(decodedResponse);
+      if (response.statusCode != 200) {
+        throw Exception(
+            "Erreur lors de la récupération des ressources : ${response.statusCode}");
+      } else {
+        return decodedResponse;
       }
     } catch (error) {
       rethrow;

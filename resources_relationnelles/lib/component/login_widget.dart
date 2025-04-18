@@ -48,6 +48,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   }
 
   Future<void> _login() async {
+    final user = Provider.of<User>(context, listen: false);
     final email = _emailController.text;
     final password = _passwordController.text;
 
@@ -62,6 +63,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     try {
       final user = Provider.of<User>(context, listen: false);
       await user.authentificate(email, password);
+      user.mail = email;
       widget.onLoginSuccess?.call(email);
     } catch (error) {
       widget.onLoginError?.call(error);

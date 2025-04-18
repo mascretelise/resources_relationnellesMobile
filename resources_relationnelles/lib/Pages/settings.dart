@@ -22,48 +22,45 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(useMaterial3: true),
-      home: Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                BuildSwitch(
-                  title: 'Se souvenir de moi',
-                  settingValue: userConfig.rememberUsername,
-                  onChanged: (value) {
-                    setState(() {
-                      userConfig.rememberUsername = value;
-                    });
-                  },
-                ),
-                BuildSwitch(
-                  title: 'Mode nuit',
-                  settingValue: userConfig.nightMode,
-                  onChanged: (value) {
-                    setState(() {
-                      userConfig.nightMode = value;
-                    });
-                  },
-                ),
-                BuildSwitch(
-                  title: 'Mode daltonien',
-                  settingValue: userConfig.colorblind,
-                  onChanged: (value) {
-                    setState(() {
-                      userConfig.colorblind = value;
-                    });
-                  },
-                ),
-                OutlinedButton(
-                  onPressed: () {
-                    userConfig.saveSettings(); //Méthode à faire
-                  },
-                  child: const Text("Enregistrer mes préférences"),
-                ),
-              ],
-            ),
+    return Scaffold(
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              BuildSwitch(
+                title: 'Se souvenir de moi',
+                settingValue: userConfig.rememberUsername,
+                onChanged: (value) {
+                  setState(() {
+                    userConfig.rememberUsername = value;
+                  });
+                },
+              ),
+              BuildSwitch(
+                title: 'Mode nuit',
+                settingValue: userConfig.nightMode,
+                onChanged: (value) {
+                  setState(() {
+                    userConfig.nightMode = value;
+                  });
+                },
+              ),
+              BuildSwitch(
+                title: 'Mode daltonien',
+                settingValue: userConfig.colorblind,
+                onChanged: (value) {
+                  setState(() {
+                    userConfig.colorblind = value;
+                  });
+                },
+              ),
+              OutlinedButton(
+                onPressed: () {
+                  userConfig.saveSettings(); //Méthode à faire
+                },
+                child: const Text("Enregistrer mes préférences"),
+              ),
+            ],
           ),
         ),
       ),

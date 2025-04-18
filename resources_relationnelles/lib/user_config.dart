@@ -43,9 +43,9 @@ class UserConfig {
     print("Saving settings...");
     try {
       // Récupération du fichier de config
-      final directory = await getApplicationDocumentsDirectory();
-      final filePath = '${directory.path}/settings.json';
-      final file = File(filePath);
+      final Directory directory = await getApplicationDocumentsDirectory();
+      final String filePath = '${directory.path}/settings.json';
+      final File file = File(filePath);
 
       print("Settings file path: $filePath");
 

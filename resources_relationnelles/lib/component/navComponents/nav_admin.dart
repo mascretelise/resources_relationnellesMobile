@@ -16,38 +16,40 @@ class NavAdmin extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4, // Nombre d'onglets
-      child: Scaffold(
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('(Re)Sources Relationnelles'), //Nom de l'appli
+                CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/logo.png'),
+                  radius: 20,
+                ),
+              ],
+            ),
+            backgroundColor: Colors.blue[100],
+            bottom: const TabBar(
+              tabs: [
+                //Définis les icones et le nom des boutons de navigation
+                Tab(icon: Icon(Icons.account_circle_outlined), text: 'Compte'),
+                Tab(icon: Icon(Icons.settings), text: 'Paramètres'),
+                Tab(icon: Icon(Icons.file_upload), text: 'Upload'),
+                Tab(icon: Icon(Icons.file_copy), text: 'Banque de ressources'),
+                //Tab(icon: Icon(Icons.NomIcone), text: 'Texte du tab'),
+              ],
+            ),
+          ),
+          body: const TabBarView(
             children: [
-              const Text('(Re)Sources Relationnelles'), //Nom de l'appli
-              CircleAvatar(
-                backgroundImage: AssetImage('assets/images/logo.png'),
-                radius: 20,
-              ),
+              //Instanciation des classes définies dans le répertoire des pages dans l'ordre des tabs
+              Accueil(),
+              Settings(),
+              ExportRessource(),
+              VisualiseRessource(),
             ],
           ),
-          backgroundColor: Colors.blue[100],
-          bottom: const TabBar(
-            tabs: [
-              //Définis les icones et le nom des boutons de navigation
-              Tab(icon: Icon(Icons.account_circle_outlined), text: 'Compte'),
-              Tab(icon: Icon(Icons.settings), text: 'Paramètres'),
-              Tab(icon: Icon(Icons.file_upload), text: 'Upload'),
-              Tab(icon: Icon(Icons.file_copy), text: 'Banque de ressources'),
-              //Tab(icon: Icon(Icons.NomIcone), text: 'Texte du tab'),
-            ],
-          ),
-        ),
-        body: const TabBarView(
-          children: [
-            //Instanciation des classes définies dans le répertoire des pages dans l'ordre des tabs
-            Accueil(),
-            Settings(),
-            ExportRessource(),
-            VisualiseRessource(),
-          ],
         ),
       ),
     );

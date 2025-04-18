@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:video_player/video_player.dart';
 
 /*
   Définition des widgets classiques avec paramètres par défaut 
@@ -72,5 +77,41 @@ class RessourcesRelationellesElements {
         onChanged: onChanged,
       ),
     );
+  }
+
+  static Widget previewFile({
+    required String titre,
+    required String description,
+    required String categorie,
+    required String path,
+    required String ext,
+    required String auteur,
+  }) {
+    //final ext = path.split('.').last.toLowerCase();
+    if (['jpg', 'jpeg', 'png', 'gif'].contains(ext)) {
+      return Column(
+        children: [
+          Text("${titre} de ${auteur}"),
+          Text(categorie),
+          PhotoView(imageProvider: FileImage(File(path))),
+          Text(description),
+        ],
+      );
+    } else if (ext == 'pdf') {
+      return Column(
+        children: [
+          Text("${titre} de ${auteur}"),
+          Text(categorie),
+          SfPdfViewer.file(File(path)),
+          Text(description),
+        ],
+      );
+    }
+    // else if (['mp4', 'mov', 'avi'].contains(ext)) {
+    //   return VideoPreview(path: path);
+    // }
+    else {
+      return Center(child: Text('Unsupported file type'));
+    }
   }
 }

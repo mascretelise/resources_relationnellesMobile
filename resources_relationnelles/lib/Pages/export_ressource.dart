@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:cookie_jar/cookie_jar.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -60,7 +58,7 @@ class _ExportRessourceState extends State<ExportRessource> {
         child: SingleChildScrollView(
           child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Container(
+              child: SizedBox(
                 height: 500,
                 child: Card(
                   shape: RoundedRectangleBorder(
@@ -158,8 +156,6 @@ class _ExportRessourceState extends State<ExportRessource> {
 
   Future<void> sendRessource() async {
     final user = Provider.of<User>(context, listen: false);
-    //CookieJar cookieJar = user.cookieJar;
-
     var client = http.Client(); // Client HTTP
     try {
       var uri = Config.connect(Config.uploadRoute); // Composition URL pour API
