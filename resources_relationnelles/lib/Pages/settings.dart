@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/themeProvider.dart';
 import 'package:myapp/user_config.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({super.key});
+  const Settings({super.key, required this.toggleTheme});
+  final VoidCallback toggleTheme;
 
   @override
   _SettingsState createState() => _SettingsState();
@@ -22,6 +25,8 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -38,12 +43,9 @@ class _SettingsState extends State<Settings> {
               ),
               BuildSwitch(
                 title: 'Mode nuit',
-                settingValue: userConfig.nightMode,
-                onChanged: (value) {
-                  setState(() {
-                    userConfig.nightMode = value;
-                  });
-                },
+                settingValue: themeProvider.theme ==
+                    ThemeData(brightness: Brightness.dark),
+                onChanged: (_) => themeProvider.toggleTheme(),
               ),
               BuildSwitch(
                 title: 'Mode daltonien',

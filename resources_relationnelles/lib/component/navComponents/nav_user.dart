@@ -3,6 +3,8 @@ import 'package:myapp/Pages/accueil.dart';
 import 'package:myapp/Pages/settings.dart';
 import 'package:myapp/Pages/visualise_ressource.dart';
 import 'package:myapp/Pages/export_ressource.dart';
+import 'package:myapp/themeProvider.dart';
+import 'package:provider/provider.dart';
 
 /*
 > Entête de l'application avec nom/icone et rouleau de navigation
@@ -10,10 +12,12 @@ import 'package:myapp/Pages/export_ressource.dart';
 */
 
 class NavUser extends StatelessWidget {
-  const NavUser({super.key});
+  const NavUser({super.key, this.toggleTheme});
+  final VoidCallback? toggleTheme;
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return DefaultTabController(
       length: 4, // Nombre d'onglets
       child: SafeArea(
@@ -29,7 +33,9 @@ class NavUser extends StatelessWidget {
                 ),
               ],
             ),
-            backgroundColor: Colors.blue[100],
+            backgroundColor: themeProvider.isDarkMode
+                ? Color.fromARGB(255, 2, 105, 25)
+                : Color.fromARGB(255, 55, 245, 38),
             bottom: const TabBar(
               tabs: [
                 //Définis les icones et le nom des boutons de navigation
@@ -40,11 +46,11 @@ class NavUser extends StatelessWidget {
               ],
             ),
           ),
-          body: const TabBarView(
+          body: TabBarView(
             children: [
               //Instanciation des classes définies dans le répertoire des pages dans l'ordre des tabs
               Accueil(),
-              Settings(),
+              Settings(toggleTheme: toggleTheme!),
               ExportRessource(),
               VisualiseRessource(),
               //ClasseDunePage(),

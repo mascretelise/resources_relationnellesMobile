@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Pages/login.dart';
 import 'package:myapp/Pages/settings.dart';
 import 'package:myapp/Pages/visualise_ressource.dart';
+import 'package:myapp/themeProvider.dart';
+import 'package:provider/provider.dart';
 
 /*
 > Entête de l'application avec nom/icone et rouleau de navigation
@@ -9,10 +11,12 @@ import 'package:myapp/Pages/visualise_ressource.dart';
 */
 
 class NavDisconnected extends StatelessWidget {
-  const NavDisconnected({super.key});
+  const NavDisconnected({super.key, this.toggleTheme});
+  final VoidCallback? toggleTheme;
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return DefaultTabController(
       length: 3, // Nombre d'onglets
       child: SafeArea(
@@ -28,7 +32,9 @@ class NavDisconnected extends StatelessWidget {
                 ),
               ],
             ),
-            backgroundColor: Colors.blue[100],
+            backgroundColor: themeProvider.isDarkMode
+                ? Color.fromARGB(255, 12, 89, 153)
+                : Color.fromARGB(255, 114, 188, 248),
             bottom: const TabBar(
               tabs: [
                 //Définis les icones et le nom des boutons de navigation
@@ -42,7 +48,7 @@ class NavDisconnected extends StatelessWidget {
           body: TabBarView(
             children: [
               //Instanciation des classes définies dans le répertoire des pages dans l'ordre des tabs
-              Settings(),
+              Settings(toggleTheme: toggleTheme!),
               Login(),
               VisualiseRessource(),
               //ClasseDunePage(),

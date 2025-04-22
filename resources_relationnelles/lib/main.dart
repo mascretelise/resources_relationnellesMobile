@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/component/navComponents/nav_admin.dart';
 import 'package:myapp/component/navComponents/nav_disconnected.dart';
 import 'package:myapp/component/navComponents/nav_user.dart';
+import 'package:myapp/themeProvider.dart';
 import 'package:myapp/user.dart';
 import 'package:provider/provider.dart';
 
@@ -10,8 +11,11 @@ Future<void> main() async {
   final user = await User.create();
   //user.cookieJar;
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => user,
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => user),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
       child: MyApp(),
     ),
   );
@@ -20,17 +24,27 @@ Future<void> main() async {
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorObservers: [routeObserver],
-      initialRoute: '/disconnected',
-      routes: {
-        '/disconnected': (context) => const NavDisconnected(),
-        '/user': (context) => const NavUser(),
-        '/admin': (context) => const NavAdmin(),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp(
+          theme: themeProvider.theme,
+          navigatorObservers: [routeObserver],
+          initialRoute: '/disconnected',
+          routes: {
+            '/disconnected': (context) =>
+                NavDisconnected(toggleTheme: themeProvider.toggleTheme),
+            '/user': (context) =>
+                NavUser(toggleTheme: themeProvider.toggleTheme),
+            '/admin': (context) =>
+                NavAdmin(toggleTheme: themeProvider.toggleTheme),
+          },
+        );
       },
     );
   }
