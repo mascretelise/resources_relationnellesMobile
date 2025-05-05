@@ -56,22 +56,15 @@ class RessourcesRelationellesElements {
     return SizedBox(
       width: finalWidth,
       child: DropdownButtonFormField<String>(
-        style: const TextStyle(
-          fontSize: 11,
-          color: Colors.black,
-        ),
         value: value,
         decoration: InputDecoration(
-          border: const OutlineInputBorder(),
           labelText: label,
+          border: OutlineInputBorder(),
         ),
         items: options
             .map((option) => DropdownMenuItem<String>(
                   value: option,
-                  child: Text(
-                    option,
-                    style: const TextStyle(fontSize: 14),
-                  ),
+                  child: Text(option),
                 ))
             .toList(),
         onChanged: onChanged,

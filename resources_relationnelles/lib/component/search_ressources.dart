@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:myapp/category.dart';
 import 'package:myapp/component/ressources_relationelles_elements.dart';
 import 'package:myapp/user.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +43,9 @@ class _RegisterWidgetState extends State<SearchRessources> {
 
   @override
   Widget build(BuildContext context) {
+    final categoryProvider = Provider.of<CategoryProvider>(context);
+    final List<String> categories =
+        categoryProvider.categories.map((cat) => cat.name).toList();
     final user = Provider.of<User>(context, listen: false);
     return SingleChildScrollView(
       child: Card(
@@ -69,7 +73,7 @@ class _RegisterWidgetState extends State<SearchRessources> {
                     ),
                     RessourcesRelationellesElements.buildDropdown(
                       label: "Catégories",
-                      options: ["Astronomie", "Nourriture", "Chats"],
+                      options: categories,
                       value: _categorieRessourceController,
                       widthPercent: 32,
                       context: context,

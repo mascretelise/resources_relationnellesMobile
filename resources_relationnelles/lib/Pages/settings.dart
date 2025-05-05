@@ -70,6 +70,7 @@ class _SettingsState extends State<Settings> {
   }
 }
 
+// ignore: must_be_immutable
 class BuildSwitch extends StatefulWidget {
   final String title; //Titre du switch
   bool settingValue; //Valeur initiale

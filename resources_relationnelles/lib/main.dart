@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/category.dart';
 import 'package:myapp/component/navComponents/nav_admin.dart';
 import 'package:myapp/component/navComponents/nav_disconnected.dart';
 import 'package:myapp/component/navComponents/nav_user.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => user),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => CategoryProvider()),
       ],
       child: MyApp(),
     ),
@@ -23,10 +25,23 @@ Future<void> main() async {
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
 
-  final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      final categoryProvider =
+          Provider.of<CategoryProvider>(context, listen: false);
+      categoryProvider.getCategory();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
