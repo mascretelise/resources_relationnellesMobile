@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/Pages/login.dart';
 import 'package:myapp/Pages/settings.dart';
 import 'package:myapp/Pages/visualise_ressource.dart';
-import 'package:myapp/themeProvider.dart';
+import 'package:myapp/dataClass/themeProvider.dart';
 import 'package:provider/provider.dart';
 
 /*

@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:myapp/category.dart';
-import 'package:myapp/component/ressources_relationelles_elements.dart';
-import 'package:myapp/user.dart';
+import 'package:myapp/dataClass/category.dart';
+import 'package:myapp/component/widgetComponents/ressources_relationelles_elements.dart';
+import 'package:myapp/dataClass/user.dart';
 import 'package:provider/provider.dart';
 
 class SearchRessources extends StatefulWidget {

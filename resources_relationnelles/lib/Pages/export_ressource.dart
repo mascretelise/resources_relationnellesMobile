@@ -3,10 +3,10 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:myapp/category.dart';
-import 'package:myapp/component/ressources_relationelles_elements.dart';
-import 'package:myapp/config.dart';
-import 'package:myapp/user.dart';
+import 'package:myapp/dataClass/category.dart';
+import 'package:myapp/component/widgetComponents/ressources_relationelles_elements.dart';
+import 'package:myapp/dataClass/config.dart';
+import 'package:myapp/dataClass/user.dart';
 import 'package:provider/provider.dart';
 
 class ExportRessource extends StatefulWidget {

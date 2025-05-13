@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
-import 'package:myapp/config.dart';
+import 'package:myapp/dataClass/config.dart';
 
 class User extends ChangeNotifier {
   var id = -1;
@@ -85,7 +85,7 @@ class User extends ChangeNotifier {
       'lastName': nom,
       'firstName': prenom,
       'email': mail,
-      'password': password,
+      'mdp': password,
     });
 
     final header = {'Content-Type': 'application/json'};

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/component/search_ressources.dart';
+import 'package:myapp/component/widgetComponents/search_ressources.dart';
 
 class VisualiseRessource extends StatelessWidget {
   const VisualiseRessource({super.key});

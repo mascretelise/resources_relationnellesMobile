@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:myapp/config.dart';
+import 'package:myapp/dataClass/config.dart';
 
 class Category {
   int id;
@@ -59,7 +59,7 @@ class CategoryProvider with ChangeNotifier {
         );
       }
     } catch (error) {
-      rethrow;
+      print(error);
     } finally {
       client.close();
     }

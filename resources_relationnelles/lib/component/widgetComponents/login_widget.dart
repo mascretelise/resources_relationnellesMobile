@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/component/ressources_relationelles_elements.dart';
-import 'package:myapp/user.dart';
+import 'package:myapp/component/widgetComponents/ressources_relationelles_elements.dart';
+import 'package:myapp/dataClass/user.dart';
 import 'package:provider/provider.dart';
 
 class LoginWidget extends StatefulWidget {
@@ -48,7 +48,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   }
 
   Future<void> _login() async {
-    final user = Provider.of<User>(context, listen: false);
+    //final user = Provider.of<User>(context, listen: false);
     final email = _emailController.text;
     final password = _passwordController.text;
 

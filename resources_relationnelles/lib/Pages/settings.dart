@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/themeProvider.dart';
-import 'package:myapp/user_config.dart';
+import 'package:myapp/dataClass/themeProvider.dart';
+import 'package:myapp/dataClass/user_config.dart';
 import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
