@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/dataClass/main.dart' as main;
+import 'package:myapp/main.dart' as main;
 import 'package:myapp/dataClass/user.dart';
 import 'package:provider/provider.dart'; // wherever you declared your routeObserver
 
