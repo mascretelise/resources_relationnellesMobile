@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/dataClass/config.dart';
 import 'package:myapp/dataClass/user.dart';
 import 'package:myapp/component/widgetComponents/ressources_relationelles_elements.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   bool mentionLegalesAccepted = false;
+  bool cguAccepted = false;
   bool buttonRegisterEnabled = false;
 
   @override
@@ -218,7 +220,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                     MediaQuery.of(context).size.height * 0.9,
                                 child: SingleChildScrollView(
                                   child: Text(
-                                      "Texte très long avec les mentions légales à mettre \n"),
+                                      Config.mentionLegales,),
                                 ),
                               ),
                               actions: [
@@ -232,7 +234,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         );
                       },
                       child: Text(
-                        "J'accepte les mentions légales",
+                        "Afficher les mentions légales",
                         style: TextStyle(
                           fontSize: 15,
                           color: const Color.fromARGB(255, 51, 110, 230),
@@ -244,12 +246,93 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     onChanged: (bool? value) {
                       setState(() {
                         mentionLegalesAccepted = value ?? false;
-                        buttonRegisterEnabled = mentionLegalesAccepted;
+                        buttonRegisterEnabled = cguAccepted&&mentionLegalesAccepted;
                       });
                     },
                     controlAffinity:
                         ListTileControlAffinity.trailing, // Checkbox à droite
                   ),
+                  CheckboxListTile(
+                    title: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Conditions Générales d'Utilisation"),
+                              content: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                child: SingleChildScrollView(
+                                  child: Text(
+                                      Config.conditionGeneralesUtilisation,),
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text("Fermer"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        "Accepter les CGU",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: const Color.fromARGB(255, 51, 110, 230),
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                    value: cguAccepted,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        cguAccepted = value ?? false;
+                        buttonRegisterEnabled = cguAccepted&&mentionLegalesAccepted;
+                      });
+                    },
+                    controlAffinity:
+                        ListTileControlAffinity.trailing, // Checkbox à droite
+                  ),
+                  GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Politique de confidentialité"),
+                              content: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.9,
+                                child: SingleChildScrollView(
+                                  child: Text(
+                                      Config.politiqueConfidentialite,),
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text("Fermer"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        "Consulter notre politique de confidentialité",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: const Color.fromARGB(255, 51, 110, 230),
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
                   OutlinedButton(
                     onPressed: buttonRegisterEnabled ? register : null,
                     child: Text(

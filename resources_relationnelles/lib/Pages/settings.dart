@@ -17,8 +17,8 @@ class _SettingsState extends State<Settings> {
   @override
   void initState() {
     super.initState();
-    userConfig = UserConfig(); //Initialisation
-    userConfig.loadFromJson().then((_) {
+    userConfig = UserConfig(context); //Initialisation
+    userConfig.loadFromJson(context).then((_) {
       setState(() {});
     });
   }
@@ -39,14 +39,19 @@ class _SettingsState extends State<Settings> {
                   setState(() {
                     userConfig.rememberUsername = value;
                   });
+                  userConfig.saveSettings(context);
                 },
               ),
               BuildSwitch(
-                title: 'Mode nuit',
-                settingValue: themeProvider.theme ==
-                    ThemeData(brightness: Brightness.dark),
-                onChanged: (_) => themeProvider.toggleTheme(),
-              ),
+                  title: 'Mode nuit',
+                  settingValue: themeProvider.theme ==
+                      ThemeData(brightness: Brightness.dark),
+                  onChanged: (value) {
+                    setState(() {
+                      themeProvider.toggleTheme();
+                    });
+                    userConfig.saveSettings(context);
+                  }),
               BuildSwitch(
                 title: 'Mode daltonien',
                 settingValue: userConfig.colorblind,
@@ -54,13 +59,8 @@ class _SettingsState extends State<Settings> {
                   setState(() {
                     userConfig.colorblind = value;
                   });
+                  userConfig.saveSettings(context);
                 },
-              ),
-              OutlinedButton(
-                onPressed: () {
-                  userConfig.saveSettings(); //Méthode à faire
-                },
-                child: const Text("Enregistrer mes préférences"),
               ),
             ],
           ),

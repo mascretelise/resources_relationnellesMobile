@@ -18,21 +18,21 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => CategoryProvider()),
       ],
-      child: MyApp(),
+      child: ReSourcesRelationelles(),
     ),
   );
 }
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
-class MyApp extends StatefulWidget {
-  MyApp({super.key});
+class ReSourcesRelationelles extends StatefulWidget {
+  ReSourcesRelationelles({super.key});
 
   @override
-  _MyAppState createState() => _MyAppState();
+  _ReSourcesRelationellesState createState() => _ReSourcesRelationellesState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _ReSourcesRelationellesState extends State<ReSourcesRelationelles> {
   @override
   void initState() {
     super.initState();

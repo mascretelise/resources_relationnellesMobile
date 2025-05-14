@@ -1,7 +1,10 @@
 import 'dart:convert'; // For jsonDecode
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart'; // For rootBundle to load assets
+import 'package:myapp/dataClass/themeProvider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart'; // For rootBundle to load assets
 
 class UserConfig {
   // Instance variables with default values
@@ -12,34 +15,44 @@ class UserConfig {
   String colorblindType = ""; // Default empty
 
   // Constructor to load settings from the JSON file on instantiation
-  UserConfig() {
-    loadFromJson();
+  UserConfig(context) {
+    loadFromJson(context);
   }
 
-  // Asynchronously loads settings from JSON file
-  Future<void> loadFromJson() async {
-    try {
-      final String jsonString =
-          await rootBundle.loadString('assets/settings.json');
+Future<void> loadFromJson(BuildContext context) async {
+  final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+  try {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final String filePath = '${directory.path}/settings.json';
+    final File file = File(filePath);
+
+    if (await file.exists()) {
+      final String jsonString = await file.readAsString();
       final Map<String, dynamic> data = jsonDecode(jsonString);
 
-      // Update instance variables from the loaded data, or use defaults
       rememberUsername = data['storeUsername'] ?? rememberUsername;
       nightMode = data['enableNightmode'] ?? nightMode;
       colorblind = data['colorblindMode'] ?? colorblind;
       colorblindType = data['colorblindType'] ?? colorblindType;
 
-      print("DEFAULTS :");
+      themeProvider.setThemeFromBool(nightMode); // Apply theme from file
+
+      print("LOADED SETTINGS:");
       print("Remember Username: $rememberUsername");
       print("Night Mode: $nightMode");
       print("Colorblind Mode: $colorblind");
       print("Colorblind Type: $colorblindType");
-    } catch (e) {
-      print("Error loading JSON: $e");
+    } else {
+      print("No saved settings file found.");
     }
+  } catch (e) {
+    print("Error loading settings: $e");
   }
+}
 
-  Future<void> saveSettings() async {
+
+  Future<void> saveSettings(context) async {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     print("Saving settings...");
     try {
       // Récupération du fichier de config
@@ -60,9 +73,9 @@ class UserConfig {
       // Mise à jour des paramètres existants avec les nouvelles valeurs
       existingSettings.addAll({
         'storeUsername': rememberUsername,
-        'enableNightmode': nightMode,
+        'enableNightmode': themeProvider.isDarkMode,
         'colorblindMode': colorblind,
-        'colorblindType': colorblindType,
+        //'colorblindType': colorblindType,
       });
 
       // Conversion en JSON
@@ -71,7 +84,7 @@ class UserConfig {
       // Écriture dans le fichier
       await file.writeAsString(jsonString);
       print("Settings saved to JSON file.\n $jsonString");
-      loadFromJson();
+      loadFromJson(context);
     } catch (e) {
       print("Error saving settings: $e");
     }

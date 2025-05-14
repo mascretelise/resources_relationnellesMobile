@@ -16,4 +16,12 @@ class ThemeProvider extends ChangeNotifier {
     _isDarkMode = !_isDarkMode;
     notifyListeners(); //applique le thème
   }
+
+  void setThemeFromBool(bool isDark) {
+    _isDarkMode = isDark;
+    _theme = isDark
+        ? ThemeData(brightness: Brightness.dark)
+        : ThemeData(brightness: Brightness.light);
+    notifyListeners(); // Triggers UI rebuild
+  }
 }
