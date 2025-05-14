@@ -10,7 +10,7 @@ class RegisterWidget extends StatefulWidget {
     this.onRegisterSuccess,
     this.onRegisterError,
   });
-  final void Function(String email)? onRegisterSuccess;
+  final void Function(int status)? onRegisterSuccess;
   final void Function(Object error)? onRegisterError;
 
   @override
@@ -152,7 +152,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       final user = Provider.of<User>(context, listen: false);
       await user.register(user.nom, user.prenom, user.mail, password);
       await user.authentificate(user.mail, password);
-      widget.onRegisterSuccess?.call(user.mail);
+      await user.getInfos();
+      widget.onRegisterSuccess?.call(user.status);
     } catch (e) {
       widget.onRegisterError?.call(e);
       setState(() => buttonRegisterEnabled = true);

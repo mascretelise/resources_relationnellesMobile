@@ -4,7 +4,7 @@ import 'package:myapp/dataClass/user.dart';
 import 'package:provider/provider.dart';
 
 class LoginWidget extends StatefulWidget {
-  final void Function(String email)? onLoginSuccess;
+  final void Function(int status)? onLoginSuccess;
   final void Function(Object error)? onLoginError;
 
   const LoginWidget({
@@ -64,7 +64,8 @@ class _LoginWidgetState extends State<LoginWidget> {
       final user = Provider.of<User>(context, listen: false);
       await user.authentificate(email, password);
       user.mail = email;
-      widget.onLoginSuccess?.call(email);
+      await user.getInfos();
+      widget.onLoginSuccess?.call(user.status);
     } catch (error) {
       widget.onLoginError?.call(error);
       _showAlert('Erreur', 'Connexion échouée :\n$error');

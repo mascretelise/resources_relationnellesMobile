@@ -44,8 +44,8 @@ class NavAdmin extends StatelessWidget {
               ],
             ),
             backgroundColor: themeProvider.isDarkMode
-                ? Color.fromARGB(255, 12, 89, 153)
-                : Color.fromARGB(255, 114, 188, 248),
+                ? Color.fromARGB(255, 167, 92, 2)
+                : Color.fromARGB(255, 255, 165, 0),
             bottom: const TabBar(
               tabs: [
                 Tab(icon: Icon(Icons.account_circle_outlined), text: 'Compte'),

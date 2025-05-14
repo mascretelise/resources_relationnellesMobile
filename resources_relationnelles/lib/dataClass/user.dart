@@ -14,6 +14,7 @@ class User extends ChangeNotifier {
   var mail = "";
   var passwordHash = "";
   var status = 0;
+  var pseudonyme = "";
   late String token;
   //late PersistCookieJar cookieJar;
 
@@ -43,34 +44,29 @@ class User extends ChangeNotifier {
     passwordHash = "";
     status = 0;
     token = "";
+    pseudonyme = "";
     //cookieJar.deleteAll();
   }
 
   Future<void> authentificate(String mail, String password) async {
     var client = http.Client(); //Création client HTTP
     try {
-      final Uri url = Config.connect(Config.loginRoute);
-      var response = await client.post(url, body: {
+      final Uri urlLogin = Config.connect(Config.loginRoute);
+      var responseLogin = await client.post(urlLogin, body: {
         'email': mail,
         'mdp': password,
       }).timeout(
           Config.timeoutValue); //paramètres de la requête (url, données, TO)
 
-      var decodedResponse = utf8.decode(response.bodyBytes);
-      print(decodedResponse);
-      print(response.headers);
+      var decodedResponseLogin = utf8.decode(responseLogin.bodyBytes);
+      print(decodedResponseLogin);
+      print(responseLogin.headers);
 
-      if (response.statusCode != 200) {
+      if (responseLogin.statusCode != 200) {
         throw Exception(
-            "Erreur lors de l'authentification' ${response.statusCode}");
+            "Erreur lors de l'authentification' ${responseLogin.statusCode}");
       } else {
-        // final cookies =
-        //     response.headers['set-cookie']; //Récupération des cookies
-        // if (cookies != null) {
-        //   cookieJar.saveFromResponse(
-        //       url, [Cookie.fromSetCookieValue(cookies)]); //stockage
-        //}
-        token = response.headers['token']!;
+        token = responseLogin.headers['token']!;
       }
     } catch (error) {
       rethrow;
@@ -122,6 +118,48 @@ class User extends ChangeNotifier {
           throw Exception("Erreur ${response.statusCode}");
       }
     } catch (error) {
+      rethrow;
+    } finally {
+      client.close();
+    }
+  }
+
+  Future<void> getInfos() async {
+    var client = http.Client();
+
+    final Uri urlGetInfos = Config.connect(
+      "/user/infosByEmail",
+      queryParams: {'email': mail}, // Proper query handling
+    );
+
+    try {
+      var responseGetInfos = await client.get(
+        urlGetInfos,
+        headers: {'token': token},
+      );
+
+      var decodedResponseGetInfos = utf8.decode(responseGetInfos.bodyBytes);
+      print(decodedResponseGetInfos);
+      print(responseGetInfos.headers);
+
+      if (responseGetInfos.statusCode != 200) {
+        throw Exception(
+          "Erreur lors de la récupération des données utilisateur, code ${responseGetInfos.statusCode}",
+        );
+      }
+      List<dynamic> userList = jsonDecode(decodedResponseGetInfos);
+      Map<String, dynamic> user = userList[0];
+
+      mail = user['uti_email'];
+      prenom = user['uti_name'];
+      nom = user['uti_firstname'];
+      status = user['uti_statut'];
+      pseudonyme = user['uti_pseudonyme']??""; // nullable
+      passwordHash = user['uti_password'];
+
+      print(userList);
+    } catch (e) {
+      print("Erreur dans getInfos: $e");
       rethrow;
     } finally {
       client.close();

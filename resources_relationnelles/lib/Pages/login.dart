@@ -20,16 +20,16 @@ class _LoginState extends State<Login> {
           Expanded(
             child: typeAuth
                 ? LoginWidget(
-                    onLoginSuccess: (email) {
-                      Navigator.pushReplacementNamed(context, '/user');
+                    onLoginSuccess: (status) {
+                      sendToRoute(status);
                     },
                     onLoginError: (error) {
                       debugPrint("Erreur login: $error");
                     },
                   )
                 : RegisterWidget(
-                    onRegisterSuccess: (email) {
-                      Navigator.pushReplacementNamed(context, '/user');
+                    onRegisterSuccess: (status) {
+                      sendToRoute(status);
                     },
                     onRegisterError: (error) {
                       debugPrint("Erreur login: $error");
@@ -56,5 +56,27 @@ class _LoginState extends State<Login> {
     setState(() {
       typeAuth = !typeAuth;
     });
+  }
+
+  void sendToRoute(int permission) {
+    switch (permission) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/disconnected');
+        
+      case 1:
+        Navigator.pushReplacementNamed(context, '/user');
+
+      case 2:
+        Navigator.pushReplacementNamed(context, '/user');
+
+      case 3:
+        Navigator.pushReplacementNamed(context, '/admin');
+
+      case 4:
+        Navigator.pushReplacementNamed(context, '/admin');
+
+      default:
+        Navigator.pushReplacementNamed(context, '/user');
+    }
   }
 }

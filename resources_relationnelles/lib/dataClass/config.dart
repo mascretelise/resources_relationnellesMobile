@@ -14,8 +14,8 @@ class Config {
   static const lastRessources = "/ressources/recentes";
   static const historiqueRessources = "/ressources/historique";
   static const recuperationCategories = "/category/readCategory";
-  static const recuperationEmail = "";
-  static const recuperationInfoViaEmail = "";
+  static const recuperationEmail = "/user/emailByToken";
+  static var recuperationInfoViaEmail = "/user/infosByEmail";
   static const apiKey = ""; //Clé api
   static var configfile =
       ""; //Chemin vers le fichier de configuration de l'application
@@ -150,17 +150,18 @@ NexGen se réserve le droit de modifier la présente Politique de Confidentialit
 Pour toute question relative à cette politique ou à vos données personnelles, vous pouvez nous contacter par e-mail à : contact@nexgen.fr
 """;
 
-
-
-  static connect(String targetApi) {
-    var apiPath = apiPathBase + targetApi; //Chemin de l'api
+  static Uri connect(String targetApiPath,
+      {Map<String, dynamic>? queryParams}) {
     print(
-        "Tentative de connexion à http://${serverIp}:${serverPort}${apiPath}");
+      "Tentative de connexion à http://$serverIp:$serverPort$apiPathBase$targetApiPath avec $queryParams",
+    );
+
     return Uri(
       scheme: 'http',
       host: serverIp,
       port: serverPort,
-      path: apiPath,
+      path: apiPathBase + targetApiPath, // Just the path
+      queryParameters: queryParams, // Properly handled by Dart
     );
   }
 }
