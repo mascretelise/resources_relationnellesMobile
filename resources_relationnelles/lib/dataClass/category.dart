@@ -65,4 +65,14 @@ class CategoryProvider with ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void updateCategory(int id, String newName) {
+    final index = _categories.indexWhere((category) => category.id == id); //Récupération de l'index de la catégorie dont l'id correspond
+
+    if (index != -1) {  //Si l'index existe
+      _categories[index].name = newName; //update le nom
+      //_categories[index].description = newDescription; //Update la description
+      notifyListeners(); //met à jour l'UI
+    }
+  }
 }

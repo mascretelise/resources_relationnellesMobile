@@ -128,7 +128,7 @@ class User extends ChangeNotifier {
     var client = http.Client();
 
     final Uri urlGetInfos = Config.connect(
-      "/user/infosByEmail",
+      Config.recuperationInfoViaEmail,
       queryParams: {'email': mail}, // Proper query handling
     );
 

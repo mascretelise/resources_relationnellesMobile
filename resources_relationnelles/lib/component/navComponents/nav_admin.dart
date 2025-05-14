@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/Pages/accueil.dart';
+import 'package:myapp/Pages/categories.dart';
 import 'package:myapp/Pages/settings.dart';
 import 'package:myapp/Pages/visualise_ressource.dart';
 import 'package:myapp/Pages/export_ressource.dart';
@@ -20,7 +21,7 @@ class NavAdmin extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
@@ -52,6 +53,7 @@ class NavAdmin extends StatelessWidget {
                 Tab(icon: Icon(Icons.settings), text: 'Paramètres'),
                 Tab(icon: Icon(Icons.file_upload), text: 'Upload'),
                 Tab(icon: Icon(Icons.file_copy), text: 'Banque de ressources'),
+                Tab(icon: Icon(Icons.filter_list), text: 'Catégories'),
               ],
             ),
           ),
@@ -61,6 +63,7 @@ class NavAdmin extends StatelessWidget {
               Settings(toggleTheme: toggleTheme!),
               ExportRessource(),
               VisualiseRessource(),
+              Categories(),
             ],
           ),
         ),

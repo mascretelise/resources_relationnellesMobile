@@ -15,7 +15,9 @@ class Config {
   static const historiqueRessources = "/ressources/historique";
   static const recuperationCategories = "/category/readCategory";
   static const recuperationEmail = "/user/emailByToken";
-  static var recuperationInfoViaEmail = "/user/infosByEmail";
+  static const recuperationInfoViaEmail = "/user/infosByEmail";
+  static const editionCategories = "/category/edit";
+  static const ajoutCategorie = "/category/addCategory";
   static const apiKey = ""; //Clé api
   static var configfile =
       ""; //Chemin vers le fichier de configuration de l'application
