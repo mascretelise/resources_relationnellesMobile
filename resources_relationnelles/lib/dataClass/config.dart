@@ -18,6 +18,7 @@ class Config {
   static const recuperationInfoViaEmail = "/user/infosByEmail";
   static const editionCategories = "/category/edit";
   static const ajoutCategorie = "/category/addCategory";
+  static const deleteCategorie = "/category/removeCategory";
   static const apiKey = ""; //Clé api
   static var configfile =
       ""; //Chemin vers le fichier de configuration de l'application

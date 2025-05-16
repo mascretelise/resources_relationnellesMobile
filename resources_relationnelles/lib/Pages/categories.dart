@@ -60,7 +60,7 @@ class _CategoriesState extends State<Categories> {
                               icon: const Icon(Icons.delete),
                               color: Colors.red,
                               onPressed: () {
-                                print(category.id);
+                                _showDeleteCategoryDialog(context, category);
                               },
                             ),
                           ),
@@ -246,9 +246,76 @@ class _CategoriesState extends State<Categories> {
       switch (response.statusCode) {
         case 200:
         case 201:
-          Provider.of<CategoryProvider>(context, listen: false)
-              .getCategory();
+          Provider.of<CategoryProvider>(context, listen: false).getCategory();
           print("Catégorie créée avec succès !");
+          break;
+        case 404:
+          // API non trouvée
+          throw Exception("Api non trouvée - Erreur ${response.statusCode}");
+        case 500:
+          // Erreur serveur interne
+          throw Exception(
+              "Erreur interne au serveur - Erreur ${response.statusCode}");
+        default:
+          // Autre code d'erreur
+          throw Exception("Erreur ${response.statusCode}");
+      }
+    } catch (error) {
+      //ajouterModal error
+      print(error);
+    } finally {
+      client.close(); // Fermer la connexion du client
+    }
+  }
+
+  void _showDeleteCategoryDialog(BuildContext context, Category category) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Supprimer la categorie ${category.name}'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Annuler'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              _deleteCategory(context, category.name);
+              Navigator.of(context).pop();
+            },
+            child: const Text('Supprimer'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _deleteCategory(BuildContext context, String category) async {
+    var client = http.Client(); // Création du client HTTP
+
+    final queryParams = {'category': '$category'};
+
+    final header = {'Content-Type': 'application/json'};
+
+    print("Sending HTTP Request:");
+    print("- Method: DELETE");
+
+    try {
+      var response = await client
+          .delete(
+              Config.connect(Config.deleteCategorie, queryParams: queryParams),
+              headers: header)
+          .timeout(Config.timeoutValue); // Timeout configuré
+
+      // Récupération de la réponse
+      var decodedResponse = utf8.decode(response.bodyBytes);
+      print(decodedResponse);
+
+      switch (response.statusCode) {
+        case 200:
+        case 201:
+          Provider.of<CategoryProvider>(context, listen: false).getCategory();
+          print("Catégorie supprimée avec succès !");
           break;
         case 404:
           // API non trouvée
