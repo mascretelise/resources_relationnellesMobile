@@ -145,7 +145,7 @@ class _CategoriesState extends State<Categories> {
       var response = await client.post(
         updateCategoryUri,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'name': newName}),
+        body: jsonEncode({'category': newName}),
       );
 
       var decodedResponse = utf8.decode(response.bodyBytes);

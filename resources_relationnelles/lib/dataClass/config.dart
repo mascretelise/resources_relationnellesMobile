@@ -16,7 +16,7 @@ class Config {
   static const recuperationCategories = "/category/readCategory";
   static const recuperationEmail = "/user/emailByToken";
   static const recuperationInfoViaEmail = "/user/infosByEmail";
-  static const editionCategories = "/category/edit";
+  static const editionCategories = "/category/editCategory";
   static const ajoutCategorie = "/category/addCategory";
   static const deleteCategorie = "/category/removeCategory";
   static const apiKey = ""; //Clé api
